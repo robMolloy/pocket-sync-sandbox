@@ -1,6 +1,5 @@
-import { ModeToggle } from "@/components/mode-toggle";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Html, Head, Main, NextScript } from "next/document";
+import { Head, Html, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
@@ -13,7 +12,6 @@ export default function Document() {
           enableSystem
           disableTransitionOnChange
         >
-          <ModeToggle />
           <Main />
           <NextScript />
         </ThemeProvider>
