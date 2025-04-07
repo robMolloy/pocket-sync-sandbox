@@ -86,7 +86,10 @@ const TreeDir = (p: { data: TDir; activePath: string }) => {
         defaultOpen={p.activePath?.startsWith(p.data.fullPath)}
       >
         <CollapsibleTrigger asChild>
-          <SidebarMenuButton>
+          <SidebarMenuButton
+            className="data-[active=true]:bg-secondary"
+            isActive={p.activePath?.startsWith(p.data.fullPath)}
+          >
             <ChevronRight className="transition-transform" />
             <Folder />
             {p.data.name}
