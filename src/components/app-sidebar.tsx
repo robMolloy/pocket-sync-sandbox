@@ -40,7 +40,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenu>
               <Tree
                 data={convertPathsToTree(filePaths)}
-                prefixPath=""
                 activePath="components/components/card.tsx"
               />
             </SidebarMenu>

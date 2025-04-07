@@ -66,10 +66,10 @@ export function convertPathsToTree(filePaths: string[]): TFileStructure {
   return root;
 }
 
-const TreeFile = (p: { data: TFile; active: string; prefix: string }) => {
+const TreeFile = (p: { data: TFile; activePath: string }) => {
   return (
     <SidebarMenuButton
-      isActive={p.data.fullPath === p.active}
+      isActive={p.data.fullPath === p.activePath}
       className="data-[active=true]:bg-secondary"
     >
       <File />
@@ -78,7 +78,7 @@ const TreeFile = (p: { data: TFile; active: string; prefix: string }) => {
   );
 };
 
-const TreeDir = (p: { data: TDir; activePath: string; prefixPath: string }) => {
+const TreeDir = (p: { data: TDir; activePath: string }) => {
   return (
     <SidebarMenuItem>
       <Collapsible
@@ -113,7 +113,6 @@ export function Tree(p: {
 }) {
   const sortedData = p.data.sort((a, b) => (a.name < b.name ? -1 : 1));
   const activePath = p.activePath ?? "";
-  const prefixPath = p.prefixPath ?? "";
 
   return (
     <>
@@ -125,7 +124,6 @@ export function Tree(p: {
               key={`${p.prefixPath}${item.name}`}
               data={item}
               activePath={activePath}
-              prefixPath={prefixPath}
             />
           );
         })}
@@ -136,8 +134,7 @@ export function Tree(p: {
             <TreeFile
               key={`${p.prefixPath}${item.name}`}
               data={item}
-              active={activePath}
-              prefix={prefixPath}
+              activePath={activePath}
             />
           );
         })}
