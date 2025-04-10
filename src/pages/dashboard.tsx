@@ -5,7 +5,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
@@ -14,8 +13,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { useFilePathStore } from "@/stores/filePathStore";
 
 export default function Page() {
+  const filePathStore = useFilePathStore();
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -25,17 +26,14 @@ export default function Page() {
           <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumb>
             <BreadcrumbList>
-              <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">components</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">ui</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>button.tsx</BreadcrumbPage>
-              </BreadcrumbItem>
+              {filePathStore.data.split("/").map((x, j) => (
+                <>
+                  {j > 0 && <BreadcrumbSeparator className="hidden md:block" />}
+                  <BreadcrumbItem className="hidden md:block" key={x}>
+                    <BreadcrumbLink href="#">{x}</BreadcrumbLink>
+                  </BreadcrumbItem>
+                </>
+              ))}
             </BreadcrumbList>
           </Breadcrumb>
           <Separator orientation="vertical" className="mr-2 h-4" />

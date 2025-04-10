@@ -37,7 +37,7 @@ export function convertPathsToTree(filePaths: string[]): TFileStructure {
 
     // Process each part of the path
     for (let i = 0; i < pathParts.length; i++) {
-      const part = pathParts[i];
+      const part = pathParts[i] as string;
       pathSoFar.push(part);
       const fullPath = pathSoFar.join("/");
 
@@ -66,11 +66,16 @@ export function convertPathsToTree(filePaths: string[]): TFileStructure {
   return root;
 }
 
-const TreeFile = (p: { data: TFile; activePath: string }) => {
+const TreeFile = (p: {
+  data: TFile;
+  activePath: string;
+  onFileClick: (path: string) => void;
+}) => {
   return (
     <SidebarMenuButton
       isActive={p.data.fullPath === p.activePath}
       className="data-[active=true]:bg-secondary"
+      onClick={() => p.onFileClick(p.data.fullPath)}
     >
       <File />
       {p.data.name}
@@ -78,7 +83,11 @@ const TreeFile = (p: { data: TFile; activePath: string }) => {
   );
 };
 
-const TreeDir = (p: { data: TDir; activePath: string }) => {
+const TreeDir = (p: {
+  data: TDir;
+  activePath: string;
+  onFileClick: (path: string) => void;
+}) => {
   return (
     <SidebarMenuItem>
       <Collapsible
@@ -101,6 +110,7 @@ const TreeDir = (p: { data: TDir; activePath: string }) => {
               data={p.data.contents}
               prefixPath={p.data.name + "/"}
               activePath={p.activePath}
+              onFileClick={p.onFileClick}
             />
           </SidebarMenuSub>
         </CollapsibleContent>
@@ -113,6 +123,7 @@ export function Tree(p: {
   data: TFileStructure;
   activePath?: string;
   prefixPath?: string;
+  onFileClick: (path: string) => void;
 }) {
   const sortedData = p.data.sort((a, b) => (a.name < b.name ? -1 : 1));
   const activePath = p.activePath ?? "";
@@ -127,6 +138,7 @@ export function Tree(p: {
               key={`${p.prefixPath}${item.name}`}
               data={item}
               activePath={activePath}
+              onFileClick={p.onFileClick}
             />
           );
         })}
@@ -138,6 +150,7 @@ export function Tree(p: {
               key={`${p.prefixPath}${item.name}`}
               data={item}
               activePath={activePath}
+              onFileClick={p.onFileClick}
             />
           );
         })}

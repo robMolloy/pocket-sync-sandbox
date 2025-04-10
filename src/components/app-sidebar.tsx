@@ -10,6 +10,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { convertPathsToTree, Tree } from "./Tree";
+import { useFilePathStore } from "@/stores/filePathStore";
 
 const filePaths = [
   "README.md",
@@ -31,6 +32,7 @@ const filePaths = [
 ];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const filePathStore = useFilePathStore();
   return (
     <Sidebar {...props}>
       <SidebarContent>
@@ -40,7 +42,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenu>
               <Tree
                 data={convertPathsToTree(filePaths)}
-                activePath="components/components/card.tsx"
+                activePath={filePathStore.data}
+                onFileClick={(x) => {
+                  filePathStore.setData(x);
+                }}
               />
             </SidebarMenu>
           </SidebarGroupContent>
