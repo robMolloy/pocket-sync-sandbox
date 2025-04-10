@@ -1,25 +1,52 @@
 import { Header } from "@/components/layouts/Header";
 import { LeftSidebar } from "@/components/layouts/LeftSidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { useSelectedFilePathStore } from "@/stores/selectedFilePathStore";
 import React from "react";
+import { ModeToggle } from "../mode-toggle";
 
 export function RootLayout(p: { children: React.ReactNode }) {
+  const selectedFilePathStore = useSelectedFilePathStore();
+
   return (
     <SidebarProvider>
       <LeftSidebar />
       <SidebarInset>
-        <Header />
+        <Header
+          leftChildren={
+            <div className="flex h-12 items-center gap-2">
+              <SidebarTrigger className="-ml-1" />
+              <Separator orientation="vertical" className="mr-2 h-4" />
+              <Breadcrumb>
+                <BreadcrumbList>
+                  {selectedFilePathStore.data.split("/").map((x, j) => (
+                    <>
+                      {j > 0 && <BreadcrumbSeparator className="hidden md:block" />}
+                      <BreadcrumbItem className="hidden md:block" key={x}>
+                        <BreadcrumbLink href="#">{x}</BreadcrumbLink>
+                      </BreadcrumbItem>
+                    </>
+                  ))}
+                </BreadcrumbList>
+              </Breadcrumb>
+            </div>
+          }
+          rightChildren={
+            <div className="flex items-center justify-end gap-2">
+              <ModeToggle />
+            </div>
+          }
+        />
 
         {p.children}
-
-        {/* <div className="flex flex-1 flex-col gap-4 p-4">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
-          </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
-        </div> */}
       </SidebarInset>
     </SidebarProvider>
   );
