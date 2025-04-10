@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 type TState = string;
 
-export const useFilePathStore = create<{
+export const useSelectedFilePathStore = create<{
   data: TState;
   setData: (x: TState) => void;
   clear: () => void;
