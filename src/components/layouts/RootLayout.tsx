@@ -27,14 +27,20 @@ export function RootLayout(p: { children: React.ReactNode }) {
               <Separator orientation="vertical" className="mr-2 h-4" />
               <Breadcrumb>
                 <BreadcrumbList>
-                  {selectedFilePathStore.data.split("/").map((x, j) => (
-                    <>
-                      {j > 0 && <BreadcrumbSeparator className="hidden md:block" />}
-                      <BreadcrumbItem className="hidden md:block" key={x}>
-                        <BreadcrumbLink href="#">{x}</BreadcrumbLink>
-                      </BreadcrumbItem>
-                    </>
-                  ))}
+                  {(() => {
+                    const splitPath = selectedFilePathStore.data.split("/");
+                    return splitPath.map((x, j) => {
+                      const cumulativePath = splitPath.slice(0, j + 1).join("/");
+                      return (
+                        <React.Fragment key={cumulativePath}>
+                          {j > 0 && <BreadcrumbSeparator className="hidden md:block" />}
+                          <BreadcrumbItem className="hidden md:block">
+                            <BreadcrumbLink href="#">{x}</BreadcrumbLink>
+                          </BreadcrumbItem>
+                        </React.Fragment>
+                      );
+                    });
+                  })()}
                 </BreadcrumbList>
               </Breadcrumb>
             </div>
