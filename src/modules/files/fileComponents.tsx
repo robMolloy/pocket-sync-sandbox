@@ -2,7 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { pb } from "@/config/pocketbaseConfig";
-import { createFile, listFiles, subscribeToFiles } from "@/modules/files/dbFilesUtils";
+import {
+  createFile,
+  listFiles,
+  smartSubscribeToFiles,
+  subscribeToFiles,
+  TFile,
+} from "@/modules/files/dbFilesUtils";
 import { Label } from "@radix-ui/react-label";
 import { RecordModel, RecordSubscription } from "pocketbase";
 import { useState } from "react";
@@ -15,14 +21,27 @@ export const SubscribeToFilesButton = (p: {
       onClick={async () => {
         subscribeToFiles({
           pb,
-          onChange: (e) => {
+          onCreateFile: (e) => {
             console.log(e);
             p.onChange(e);
           },
+          onUpdateFile: () => {},
+          // onDeleteFile: () => {}
         });
       }}
     >
       subscribeToFiles
+    </Button>
+  );
+};
+export const SmartSubscribeToFilesButton = (p: { onChange: (e: TFile[]) => void }) => {
+  return (
+    <Button
+      onClick={async () => {
+        smartSubscribeToFiles({ pb, onChange: p.onChange });
+      }}
+    >
+      smartSubscribeToFiles
     </Button>
   );
 };
@@ -32,8 +51,7 @@ export const ListFilesButton = () => {
     <Button
       onClick={async () => {
         const resp = await listFiles({ pb });
-        console.log(resp.success ? "list successful" : "list failed");
-        console.log(resp.data);
+        console.log(resp);
       }}
     >
       ListFilesButton
@@ -59,7 +77,6 @@ export const CreateFileForm = () => {
               const tempFiles = (e.target as unknown as { files: File[] })?.files;
               const tempFile = tempFiles?.[0];
               if (tempFile) setFile(tempFile);
-              console.log(`LoginForm.tsx:${/*LL*/ 141}`, { tempFile });
             }}
           />
         </div>
