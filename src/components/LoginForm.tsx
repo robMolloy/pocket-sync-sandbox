@@ -25,7 +25,6 @@ export const LogoutButton = (p: { onLogoutAttempt: (x: { success: boolean }) => 
       onClick={async () => {
         const resp = logout({ pb });
         p.onLogoutAttempt(resp);
-        console.log(resp.success ? "logout successful" : "logout failed");
       }}
     >
       Log out

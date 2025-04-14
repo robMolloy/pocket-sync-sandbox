@@ -1,7 +1,5 @@
 import { CreateUserButton, LoginButton, LogoutButton } from "@/components/LoginForm";
 import { Button } from "@/components/ui/button";
-import { pb } from "@/config/pocketbaseConfig";
-import { TFile } from "@/modules/files/dbFilesUtils";
 import {
   CreateFileForm,
   ListFilesButton,
@@ -9,12 +7,12 @@ import {
   SubscribeToFilesButton,
 } from "@/modules/files/fileComponents";
 import { useAuthDataStore } from "@/stores/authDataStore";
+import { useFilesStore } from "@/stores/filesStore";
 // import { useFilesStore } from "@/stores/filesStore";
-import { useState } from "react";
 
 export default function Page() {
-  const [files, setFiles] = useState<TFile[]>([]);
-  // const filesStore = useFilesStore();
+  // const [files, setFiles] = useState<TFile[]>([]);
+  const filesStore = useFilesStore();
 
   const authDataStore = useAuthDataStore();
   const isLoggedIn = authDataStore.data?.token;
@@ -31,7 +29,7 @@ export default function Page() {
 
         <Button
           onClick={() => {
-            console.log(`index.tsx:${/*LL*/ 81}`, { x: pb.authStore });
+            console.log(`index.tsx:${/*LL*/ 32}`, authDataStore.data);
           }}
         >
           log auth
@@ -44,16 +42,13 @@ export default function Page() {
             <LogoutButton onLogoutAttempt={() => {}} />
             <br />
             <br />
-            <SubscribeToFilesButton
-              onChange={(e) => {
-                console.log(`index.tsx:${/*LL*/ 34}`, { e });
-              }}
-            />
+            <SubscribeToFilesButton onChange={() => {}} />
             <br />
             <br />
             <SmartSubscribeToFilesButton
               onChange={(x) => {
-                setFiles(x);
+                filesStore.setData(x);
+                // setFiles(x);
               }}
             />
             <br />
@@ -64,7 +59,6 @@ export default function Page() {
             <CreateFileForm />
             <br />
             <br />
-            <pre>{JSON.stringify(files, undefined, 2)}</pre>
           </>
         )}
 
@@ -77,7 +71,9 @@ export default function Page() {
             <CreateUserButton onFinish={() => {}} />
           </>
         )}
-        <pre>{JSON.stringify({ x: authDataStore.data }, undefined, 2)}</pre>
+        <pre>
+          {JSON.stringify({ auth: authDataStore.data, files: filesStore.data }, undefined, 2)}
+        </pre>
       </div>
     </div>
   );

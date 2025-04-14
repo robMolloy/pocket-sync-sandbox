@@ -33,7 +33,6 @@ export const subscribeToFiles = async (p: {
 }) => {
   // Subscribe to changes in any record in the collection
   p.pb.collection("files").subscribe("*", (e) => {
-    console.log(`dbFilesUtils.ts:${/*LL*/ 35}`, { e });
     if (e.action) p.onCreateFile(e);
   });
   return { success: true } as const;
@@ -48,7 +47,7 @@ export const smartSubscribeToFiles = async (p: {
 
   let allFiles = listFilesResp.data;
   p.onChange(allFiles);
-  p.pb.collection("files").subscribe("*", (e) => {
+  const unsub = p.pb.collection("files").subscribe("*", (e) => {
     if (e.action === "create") {
       const parseResp = fileSchema.safeParse(e.record);
       if (parseResp.success) allFiles.push(parseResp.data);
@@ -68,6 +67,8 @@ export const smartSubscribeToFiles = async (p: {
     }
     p.onChange(allFiles);
   });
+
+  return { success: true, data: unsub } as const;
 };
 
 export const createFile = async (p: { pb: PocketBase; data: { file: File; filePath: string } }) => {

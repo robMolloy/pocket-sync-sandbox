@@ -72,8 +72,6 @@ export const CreateFileForm = () => {
             placeholder="File"
             accept="image/*"
             onInput={(e) => {
-              console.log(`LoginForm.tsx:${/*LL*/ 141}`, { e });
-
               const tempFiles = (e.target as unknown as { files: File[] })?.files;
               const tempFile = tempFiles?.[0];
               if (tempFile) setFile(tempFile);
@@ -85,11 +83,10 @@ export const CreateFileForm = () => {
           disabled={!file}
           onClick={async () => {
             if (!file) return;
-            const resp = await createFile({
+            await createFile({
               pb,
               data: { file, filePath: `file_${Math.random() * 10000000000}` },
             });
-            console.log(resp);
           }}
         >
           Upload

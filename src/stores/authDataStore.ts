@@ -48,21 +48,17 @@ const extractAuthData = (authStore: BaseAuthStore) => {
 export const useAuthDataSync = (p: { pb: PocketBase }) => {
   const authDataStore = useAuthDataStore();
   useEffect(() => {
-    console.log(`authDataStore.ts:${/*LL*/ 56}`, { isValid: p.pb.authStore.isValid });
     if (!p.pb.authStore.isValid) {
-      console.log(`authDataStore.ts:${/*LL*/ 58}`, window.localStorage.getItem("pocketbase_auth"));
       const jsonResp = safeJsonParse(window.localStorage.getItem("pocketbase_auth"));
-      console.log(`authDataStore.ts:${/*LL*/ 59}`, { jsonResp });
       if (!jsonResp.success) return;
+
       const resp = pocketbaseAuthStoreSchema.safeParse(jsonResp.data);
-      console.log(`authDataStore.ts:${/*LL*/ 62}`, { resp });
       if (!resp.success) return;
 
       authDataStore.setData(resp.data);
     }
 
     const resp = extractAuthData(p.pb.authStore);
-    console.log(`authDataStore.ts:${/*LL*/ 72}`, { resp });
     if (!resp.success) return;
 
     authDataStore.setData(resp.data);
@@ -73,7 +69,6 @@ export const useAuthDataSync = (p: { pb: PocketBase }) => {
     p.pb.authStore.onChange(() => {
       if (p.pb.authStore.isValid) {
         const resp = extractAuthData(p.pb.authStore);
-        console.log(`authDataStore.ts:${/*LL*/ 79}`, { resp });
         if (!resp.success) return;
 
         authDataStore.setData(resp.data);
