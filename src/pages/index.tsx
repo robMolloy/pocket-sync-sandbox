@@ -1,11 +1,6 @@
 import { CreateUserButton, LoginButton, LogoutButton } from "@/components/LoginForm";
 import { Button } from "@/components/ui/button";
-import {
-  CreateFileForm,
-  ListFilesButton,
-  SmartSubscribeToFilesButton,
-  SubscribeToFilesButton,
-} from "@/modules/files/fileComponents";
+import { CreateFileForm } from "@/modules/files/fileComponents";
 import { useAuthDataStore } from "@/stores/authDataStore";
 import { useFilesStore } from "@/stores/filesStore";
 // import { useFilesStore } from "@/stores/filesStore";
@@ -40,20 +35,6 @@ export default function Page() {
         {isLoggedIn && (
           <>
             <LogoutButton onLogoutAttempt={() => {}} />
-            <br />
-            <br />
-            <SubscribeToFilesButton onChange={() => {}} />
-            <br />
-            <br />
-            <SmartSubscribeToFilesButton
-              onChange={(x) => {
-                filesStore.setData(x);
-                // setFiles(x);
-              }}
-            />
-            <br />
-            <br />
-            <ListFilesButton />
             <br />
             <br />
             <CreateFileForm />
