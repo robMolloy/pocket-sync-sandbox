@@ -1,9 +1,9 @@
-import { CreateUserButton, LoginButton, LogoutButton } from "@/components/LoginForm";
-import { Button } from "@/components/ui/button";
+import { CreateUserAndLoginButton, LoginButton, LogoutButton } from "@/components/LoginForm";
 import { CreateFileForm } from "@/modules/files/fileComponents";
 import { useAuthDataStore } from "@/stores/authDataStore";
 import { useFilesStore } from "@/stores/filesStore";
 // import { useFilesStore } from "@/stores/filesStore";
+import { File } from "lucide-react";
 
 export default function Page() {
   // const [files, setFiles] = useState<TFile[]>([]);
@@ -22,21 +22,19 @@ export default function Page() {
       <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 p-3 md:min-h-min">
         <h1>{authDataStore.data?.token ? "Logged in" : "Logged out"}</h1>
 
-        <Button
-          onClick={() => {
-            console.log(`index.tsx:${/*LL*/ 32}`, authDataStore.data);
-          }}
-        >
-          log auth
-        </Button>
-        <br />
-        <br />
-
         {isLoggedIn && (
           <>
             <LogoutButton onLogoutAttempt={() => {}} />
             <br />
             <br />
+            <div className="flex flex-wrap gap-4">
+              {filesStore.data.map((file) => (
+                <span key={file.id} className="flex cursor-pointer flex-col items-center gap-2">
+                  <File size={48} />
+                  <span>{file.filePath}</span>
+                </span>
+              ))}
+            </div>
             <CreateFileForm />
             <br />
             <br />
@@ -46,15 +44,14 @@ export default function Page() {
         {!isLoggedIn && (
           <>
             <LoginButton onLoginAttempt={() => {}} />
-
             <br />
             <br />
-            <CreateUserButton onFinish={() => {}} />
+            <CreateUserAndLoginButton onFinish={() => {}} />
           </>
         )}
-        <pre>
+        {/* <pre>
           {JSON.stringify({ auth: authDataStore.data, files: filesStore.data }, undefined, 2)}
-        </pre>
+        </pre> */}
       </div>
     </div>
   );

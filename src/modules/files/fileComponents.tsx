@@ -60,37 +60,51 @@ export const ListFilesButton = () => {
 };
 
 export const CreateFileForm = () => {
+  const [filePath, setFilePath] = useState("");
   const [file, setFile] = useState<File | null>(null);
   return (
     <Card>
-      <CardContent className="flex items-end gap-2 p-4">
+      <CardContent className="flex flex-col gap-4 p-4">
         <div className="flex flex-1 flex-col gap-1">
-          <Label htmlFor="file">Choose a file</Label>
+          <Label htmlFor="file">File Path</Label>
           <Input
-            id="file"
-            type="file"
-            placeholder="File"
-            accept="image/*"
+            type="text"
+            value={filePath}
             onInput={(e) => {
-              const tempFiles = (e.target as unknown as { files: File[] })?.files;
-              const tempFile = tempFiles?.[0];
-              if (tempFile) setFile(tempFile);
+              const str = (e.target as unknown as { value: string }).value;
+              setFilePath(str);
             }}
           />
         </div>
-        <Button
-          className="self-end"
-          disabled={!file}
-          onClick={async () => {
-            if (!file) return;
-            await createFile({
-              pb,
-              data: { file, filePath: `file_${Math.random() * 10000000000}` },
-            });
-          }}
-        >
-          Upload
-        </Button>
+        <div className="flex flex-wrap items-end gap-2">
+          <div className="flex flex-1 flex-col gap-1">
+            <Label htmlFor="file">Choose a file</Label>
+            <Input
+              id="file"
+              type="file"
+              placeholder="File"
+              accept="image/*"
+              onInput={(e) => {
+                const tempFiles = (e.target as unknown as { files: File[] })?.files;
+                const tempFile = tempFiles?.[0];
+                if (tempFile) setFile(tempFile);
+              }}
+            />
+          </div>
+          <Button
+            className="self-end"
+            disabled={!file}
+            onClick={async () => {
+              if (!file) return;
+              await createFile({
+                pb,
+                data: { file, filePath: `${filePath}/file_${Math.random() * 1000}` },
+              });
+            }}
+          >
+            Upload
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

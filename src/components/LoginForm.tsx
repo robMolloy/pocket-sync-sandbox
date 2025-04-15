@@ -32,12 +32,12 @@ export const LogoutButton = (p: { onLogoutAttempt: (x: { success: boolean }) => 
   );
 };
 
-export const CreateUserButton = (p: { onFinish: (x: { success: boolean }) => void }) => {
+export const CreateUserAndLoginButton = (p: { onFinish: (x: { success: boolean }) => void }) => {
   return (
     <Button
       onClick={async () => {
-        const email = "rob3@rob3.com";
-        const password = "rob3@rob3.com";
+        const email = "rob4@rob4.com";
+        const password = "rob4@rob4.com";
 
         const resp = await createUser({ pb, data: { email, password } });
         if (!resp.success) return resp;
